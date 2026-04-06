@@ -1,0 +1,952 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <!-- ============================================
+         FITLIFE - Página de Plano Personalizado
+         Exibe detalhes do plano selecionado
+         ============================================ -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Seu plano personalizado FitLife - Fichas de treino, exercícios detalhados e dicas de alimentação.">
+    
+    <title>Seu Plano Personalizado | FitLife</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💪</text></svg>">
+    
+    <!-- CSS Principal -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- ============================================
+         CABEÇALHO / NAVEGAÇÃO
+         ============================================ -->
+    <header class="cabecalho">
+        <div class="cabecalho-inner">
+            <!-- Logo -->
+            <a href="index.html" class="logo">
+                <div class="logo-icon">FL</div>
+                <span>FitLife</span>
+            </a>
+            
+            <!-- Navegação Principal -->
+            <nav>
+                <ul class="nav-lista">
+                    <li><a href="index.html" class="nav-link">Início</a></li>
+                    <li><a href="index.html#calculadora" class="nav-link">Calculadora</a></li>
+                    <li><a href="index.html#planos" class="nav-link">Planos</a></li>
+                    <li><a href="index.html#esportes" class="nav-link">Esportes</a></li>
+                </ul>
+            </nav>
+            
+            <!-- Botão Tema -->
+            <button id="btn-tema" class="btn-tema" aria-label="Alternar tema">
+                <span class="icone">🌙</span> Modo Escuro
+            </button>
+            
+            <!-- Menu Mobile -->
+            <button class="menu-toggle" aria-label="Abrir menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </header>
+
+    <!-- ============================================
+         CONTEÚDO PRINCIPAL
+         ============================================ -->
+    <main class="pagina-plano">
+        <!-- Hero do Plano -->
+        <section id="plano-hero" class="plano-hero">
+            <div class="plano-hero-bg">
+                <img id="plano-hero-img" src="images/hero-fitness.jpg" alt="Imagem do plano">
+                <div class="plano-hero-overlay"></div>
+            </div>
+            
+            <div class="container">
+                <div class="plano-hero-content">
+                    <a href="index.html" style="color: white; opacity: 0.8; display: inline-block; margin-bottom: var(--espacamento-md);">
+                        ← Voltar para Home
+                    </a>
+                    <h1 id="plano-titulo" class="plano-hero-titulo">Carregando seu plano...</h1>
+                    <p id="plano-descricao" class="plano-hero-descricao">
+                        Aguarde enquanto preparamos seu plano personalizado.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Dados do Usuário -->
+        <section class="secao">
+            <div class="container">
+                <!-- Saudação Personalizada -->
+                <div id="saudacao-usuario" style="margin-bottom: var(--espacamento-xl);">
+                    <h2 style="font-size: 1.5rem; margin-bottom: var(--espacamento-sm);">
+                        Olá, <span id="nome-usuario">Visitante</span>! 👋
+                    </h2>
+                    <p style="color: var(--cor-texto-secundario);">
+                        Aqui está seu plano personalizado baseado nos seus dados.
+                    </p>
+                </div>
+                
+                <!-- Cards de Informação do Usuário -->
+                <div class="info-grid" id="info-usuario">
+                    <div class="info-card">
+                        <div class="info-card-icone">⚖️</div>
+                        <div class="info-card-valor" id="peso-atual">--</div>
+                        <div class="info-card-label">Peso Atual (kg)</div>
+                    </div>
+                    
+                    <div class="info-card">
+                        <div class="info-card-icone">🎯</div>
+                        <div class="info-card-valor" id="peso-ideal">--</div>
+                        <div class="info-card-label">Peso Ideal (kg)</div>
+                    </div>
+                    
+                    <div class="info-card">
+                        <div class="info-card-icone">📊</div>
+                        <div class="info-card-valor" id="imc-valor">--</div>
+                        <div class="info-card-label">Seu IMC</div>
+                    </div>
+                    
+                    <div class="info-card">
+                        <div class="info-card-icone" id="meta-icone">📉</div>
+                        <div class="info-card-valor" id="meta-peso">--</div>
+                        <div class="info-card-label" id="meta-label">Meta</div>
+                    </div>
+                </div>
+                
+                <!-- Barra de Progresso -->
+                <div class="progresso-container">
+                    <div class="progresso-header">
+                        <span class="progresso-titulo">Sua Jornada até o Peso Ideal</span>
+                        <span class="progresso-porcentagem" id="progresso-pct">0%</span>
+                    </div>
+                    <div class="progresso-barra">
+                        <div class="progresso-barra-preenchimento" id="progresso-barra" style="width: 0%;"></div>
+                    </div>
+                    <div class="progresso-info">
+                        <span>Início: <strong id="peso-inicio">--</strong> kg</span>
+                        <span>Meta: <strong id="peso-meta">--</strong> kg</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Tabs de Conteúdo -->
+        <section class="secao" style="background-color: var(--cor-fundo-alt);">
+            <div class="container">
+                <!-- Navegação por Tabs -->
+                <div class="tabs" id="tabs-navegacao">
+                    <button class="tab ativo" data-tab="treino" onclick="mudarTab('treino')">
+                        🏋️ Fichas de Treino
+                    </button>
+                    <button class="tab" data-tab="alimentacao" onclick="mudarTab('alimentacao')">
+                        🥗 Alimentação
+                    </button>
+                    <button class="tab" data-tab="esportes" onclick="mudarTab('esportes')">
+                        🏃 Esportes Recomendados
+                    </button>
+                    <button class="tab" data-tab="dicas" onclick="mudarTab('dicas')">
+                        💡 Dicas
+                    </button>
+                </div>
+
+                <!-- ================================
+                     TAB: FICHAS DE TREINO
+                     ================================ -->
+                <div id="tab-treino" class="tab-conteudo ativo">
+                    <h3 style="font-size: 1.5rem; margin-bottom: var(--espacamento-lg);">
+                        Suas Fichas de Treino Personalizadas
+                    </h3>
+                    
+                    <div id="fichas-treino">
+                        <!-- Preenchido via JavaScript baseado no plano -->
+                    </div>
+                </div>
+
+                <!-- ================================
+                     TAB: ALIMENTAÇÃO
+                     ================================ -->
+                <div id="tab-alimentacao" class="tab-conteudo">
+                    <h3 style="font-size: 1.5rem; margin-bottom: var(--espacamento-lg);">
+                        Plano Alimentar
+                    </h3>
+                    
+                    <div id="plano-alimentar">
+                        <!-- Preenchido via JavaScript baseado no plano -->
+                    </div>
+                </div>
+
+                <!-- ================================
+                     TAB: ESPORTES
+                     ================================ -->
+                <div id="tab-esportes" class="tab-conteudo">
+                    <h3 style="font-size: 1.5rem; margin-bottom: var(--espacamento-lg);">
+                        Esportes Recomendados para Você
+                    </h3>
+                    
+                    <div class="esportes-grid" id="esportes-recomendados">
+                        <!-- Preenchido via JavaScript baseado no plano -->
+                    </div>
+                </div>
+
+                <!-- ================================
+                     TAB: DICAS
+                     ================================ -->
+                <div id="tab-dicas" class="tab-conteudo">
+                    <h3 style="font-size: 1.5rem; margin-bottom: var(--espacamento-lg);">
+                        Dicas para Maximizar Seus Resultados
+                    </h3>
+                    
+                    <div id="dicas-plano">
+                        <!-- Preenchido via JavaScript baseado no plano -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA Final -->
+        <section class="secao">
+            <div class="container text-center">
+                <h2 class="secao-titulo">Pronto para Começar?</h2>
+                <p class="secao-descricao" style="margin-bottom: var(--espacamento-xl);">
+                    Imprima suas fichas de treino ou salve esta página para acessar quando quiser!
+                </p>
+                
+                <div class="flex-center gap-md" style="flex-wrap: wrap;">
+                    <button onclick="window.print()" class="btn btn-primario btn-grande">
+                        🖨️ Imprimir Plano
+                    </button>
+                    <button onclick="salvarProgresso()" class="btn btn-secundario btn-grande">
+                        💾 Salvar Progresso
+                    </button>
+                    <a href="index.html#planos" class="btn btn-secundario btn-grande">
+                        ← Escolher Outro Plano
+                    </a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- ============================================
+         RODAPÉ
+         ============================================ -->
+    <footer class="rodape">
+        <div class="container">
+            <div class="rodape-bottom" style="border: none; padding: 0;">
+                <p>&copy; 2024 FitLife. Todos os direitos reservados.</p>
+                <p style="margin-top: var(--espacamento-sm);">
+                    <a href="index.html" style="color: var(--cor-primaria);">Voltar para Home</a>
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ============================================
+         SCRIPTS
+         ============================================ -->
+    <script src="script.js"></script>
+    
+    <!-- Script específico da página de plano -->
+    <script>
+        /* ============================================
+           SCRIPT DA PÁGINA DE PLANO
+           Carrega e exibe dados personalizados
+           ============================================ */
+
+        // ============================================
+        // DADOS DOS PLANOS
+        // ============================================
+        
+        const PLANOS = {
+            'perda-peso': {
+                titulo: 'Plano Perda de Peso',
+                descricao: 'Programa completo para queima de gordura com foco em cardio, treino funcional e alimentação equilibrada.',
+                imagem: 'images/cardio.jpg',
+                cor: '#ef4444',
+                fichas: [
+                    {
+                        dia: 'Segunda-feira',
+                        nome: 'Treino A - Cardio + Core',
+                        exercicios: [
+                            { nome: 'Aquecimento na esteira', series: '1', reps: '10 min' },
+                            { nome: 'Corrida intervalada', series: '10', reps: '1 min rápido / 1 min lento' },
+                            { nome: 'Prancha abdominal', series: '3', reps: '45 seg' },
+                            { nome: 'Mountain climber', series: '3', reps: '20 reps' },
+                            { nome: 'Abdominal bicicleta', series: '3', reps: '15 cada lado' },
+                            { nome: 'Burpees', series: '3', reps: '12 reps' },
+                            { nome: 'Alongamento', series: '1', reps: '5 min' }
+                        ]
+                    },
+                    {
+                        dia: 'Terça-feira',
+                        nome: 'Treino B - Membros Inferiores',
+                        exercicios: [
+                            { nome: 'Aquecimento bike', series: '1', reps: '8 min' },
+                            { nome: 'Agachamento livre', series: '4', reps: '15 reps' },
+                            { nome: 'Leg press 45°', series: '4', reps: '12 reps' },
+                            { nome: 'Cadeira extensora', series: '3', reps: '15 reps' },
+                            { nome: 'Mesa flexora', series: '3', reps: '15 reps' },
+                            { nome: 'Panturrilha em pé', series: '4', reps: '20 reps' },
+                            { nome: 'Caminhada inclinada', series: '1', reps: '15 min' }
+                        ]
+                    },
+                    {
+                        dia: 'Quarta-feira',
+                        nome: 'Treino C - Cardio HIIT',
+                        exercicios: [
+                            { nome: 'Aquecimento', series: '1', reps: '5 min' },
+                            { nome: 'Jumping jacks', series: '4', reps: '30 seg' },
+                            { nome: 'Squat jumps', series: '4', reps: '15 reps' },
+                            { nome: 'Flexão de braço', series: '3', reps: '12 reps' },
+                            { nome: 'Polichinelo', series: '4', reps: '30 seg' },
+                            { nome: 'Escalador', series: '4', reps: '20 reps' },
+                            { nome: 'Descanso ativo', series: '1', reps: '5 min caminhada' }
+                        ]
+                    },
+                    {
+                        dia: 'Quinta-feira',
+                        nome: 'Treino D - Membros Superiores',
+                        exercicios: [
+                            { nome: 'Aquecimento elíptico', series: '1', reps: '8 min' },
+                            { nome: 'Supino reto', series: '4', reps: '12 reps' },
+                            { nome: 'Remada curvada', series: '4', reps: '12 reps' },
+                            { nome: 'Desenvolvimento', series: '3', reps: '12 reps' },
+                            { nome: 'Rosca direta', series: '3', reps: '15 reps' },
+                            { nome: 'Tríceps corda', series: '3', reps: '15 reps' },
+                            { nome: 'Cardio esteira', series: '1', reps: '15 min' }
+                        ]
+                    },
+                    {
+                        dia: 'Sexta-feira',
+                        nome: 'Treino E - Full Body + Cardio',
+                        exercicios: [
+                            { nome: 'Aquecimento', series: '1', reps: '5 min' },
+                            { nome: 'Agachamento com salto', series: '3', reps: '15 reps' },
+                            { nome: 'Flexão de braço', series: '3', reps: '15 reps' },
+                            { nome: 'Afundo alternado', series: '3', reps: '12 cada perna' },
+                            { nome: 'Prancha lateral', series: '3', reps: '30 seg cada lado' },
+                            { nome: 'Kettlebell swing', series: '3', reps: '15 reps' },
+                            { nome: 'Corrida leve', series: '1', reps: '20 min' }
+                        ]
+                    }
+                ],
+                alimentacao: {
+                    calorias: 'déficit de 300-500 kcal',
+                    refeicoes: [
+                        {
+                            nome: 'Café da Manhã (7h)',
+                            itens: ['2 ovos mexidos', 'Pão integral (1 fatia)', 'Abacate (50g)', 'Café sem açúcar']
+                        },
+                        {
+                            nome: 'Lanche da Manhã (10h)',
+                            itens: ['Iogurte natural (170g)', 'Frutas vermelhas (100g)', 'Granola sem açúcar (20g)']
+                        },
+                        {
+                            nome: 'Almoço (12h30)',
+                            itens: ['Frango grelhado (150g)', 'Arroz integral (100g)', 'Feijão (80g)', 'Salada verde à vontade', 'Azeite (1 colher)']
+                        },
+                        {
+                            nome: 'Lanche da Tarde (15h30)',
+                            itens: ['Whey protein (1 scoop)', 'Banana (1 unidade)', 'Castanhas (30g)']
+                        },
+                        {
+                            nome: 'Jantar (19h)',
+                            itens: ['Peixe grelhado (150g)', 'Legumes no vapor', 'Batata doce (100g)', 'Salada verde']
+                        },
+                        {
+                            nome: 'Ceia (21h) - Opcional',
+                            itens: ['Chá de camomila', 'Queijo cottage (50g)']
+                        }
+                    ]
+                },
+                esportes: [
+                    { nome: 'Corrida', calorias: '500-800 cal/hora', imagem: 'images/cardio.jpg' },
+                    { nome: 'Natação', calorias: '400-700 cal/hora', imagem: 'images/natacao.jpg' },
+                    { nome: 'Ciclismo', calorias: '400-600 cal/hora', imagem: 'images/ciclismo.jpg' }
+                ],
+                dicas: [
+                    { titulo: 'Hidratação', texto: 'Beba pelo menos 3 litros de água por dia. A água acelera o metabolismo e ajuda na queima de gordura.' },
+                    { titulo: 'Sono', texto: 'Durma 7-8 horas por noite. O sono é essencial para a recuperação muscular e regulação hormonal.' },
+                    { titulo: 'Consistência', texto: 'Não falte aos treinos! 3-5 dias de treino por semana é o ideal para resultados consistentes.' },
+                    { titulo: 'Paciência', texto: 'Resultados levam tempo. Espere perder 0.5-1kg por semana de forma saudável.' },
+                    { titulo: 'Evite', texto: 'Refrigerantes, doces, frituras e alimentos ultraprocessados. Eles sabotam seu progresso!' }
+                ]
+            },
+            
+            'ganho-massa': {
+                titulo: 'Plano Ganho de Massa',
+                descricao: 'Programa de hipertrofia muscular com treinos de força progressivos e alimentação hipercalórica.',
+                imagem: 'images/musculacao.jpg',
+                cor: '#22c55e',
+                fichas: [
+                    {
+                        dia: 'Segunda-feira',
+                        nome: 'Treino A - Peito e Tríceps',
+                        exercicios: [
+                            { nome: 'Supino reto com barra', series: '4', reps: '8-10 reps' },
+                            { nome: 'Supino inclinado halteres', series: '4', reps: '10 reps' },
+                            { nome: 'Crucifixo máquina', series: '3', reps: '12 reps' },
+                            { nome: 'Cross over', series: '3', reps: '12 reps' },
+                            { nome: 'Tríceps francês', series: '4', reps: '10 reps' },
+                            { nome: 'Tríceps corda', series: '3', reps: '12 reps' },
+                            { nome: 'Mergulho paralelas', series: '3', reps: 'até falha' }
+                        ]
+                    },
+                    {
+                        dia: 'Terça-feira',
+                        nome: 'Treino B - Costas e Bíceps',
+                        exercicios: [
+                            { nome: 'Puxada frontal', series: '4', reps: '10 reps' },
+                            { nome: 'Remada curvada', series: '4', reps: '8-10 reps' },
+                            { nome: 'Remada unilateral', series: '3', reps: '10 cada' },
+                            { nome: 'Pulldown', series: '3', reps: '12 reps' },
+                            { nome: 'Rosca direta barra', series: '4', reps: '10 reps' },
+                            { nome: 'Rosca alternada', series: '3', reps: '12 cada' },
+                            { nome: 'Rosca martelo', series: '3', reps: '12 reps' }
+                        ]
+                    },
+                    {
+                        dia: 'Quarta-feira',
+                        nome: 'Treino C - Pernas (Quadríceps)',
+                        exercicios: [
+                            { nome: 'Agachamento livre', series: '5', reps: '8-10 reps' },
+                            { nome: 'Leg press 45°', series: '4', reps: '12 reps' },
+                            { nome: 'Hack machine', series: '3', reps: '10 reps' },
+                            { nome: 'Cadeira extensora', series: '4', reps: '12 reps' },
+                            { nome: 'Avanço', series: '3', reps: '10 cada perna' },
+                            { nome: 'Panturrilha sentado', series: '4', reps: '15 reps' },
+                            { nome: 'Panturrilha em pé', series: '4', reps: '15 reps' }
+                        ]
+                    },
+                    {
+                        dia: 'Quinta-feira',
+                        nome: 'Treino D - Ombros e Trapézio',
+                        exercicios: [
+                            { nome: 'Desenvolvimento halteres', series: '4', reps: '10 reps' },
+                            { nome: 'Elevação lateral', series: '4', reps: '12 reps' },
+                            { nome: 'Elevação frontal', series: '3', reps: '12 reps' },
+                            { nome: 'Desenvolvimento máquina', series: '3', reps: '12 reps' },
+                            { nome: 'Encolhimento halteres', series: '4', reps: '12 reps' },
+                            { nome: 'Face pull', series: '3', reps: '15 reps' },
+                            { nome: 'Crucifixo inverso', series: '3', reps: '12 reps' }
+                        ]
+                    },
+                    {
+                        dia: 'Sexta-feira',
+                        nome: 'Treino E - Pernas (Posterior)',
+                        exercicios: [
+                            { nome: 'Stiff', series: '4', reps: '10 reps' },
+                            { nome: 'Mesa flexora', series: '4', reps: '12 reps' },
+                            { nome: 'Cadeira flexora', series: '3', reps: '12 reps' },
+                            { nome: 'Elevação pélvica', series: '4', reps: '12 reps' },
+                            { nome: 'Abdução máquina', series: '3', reps: '15 reps' },
+                            { nome: 'Adução máquina', series: '3', reps: '15 reps' },
+                            { nome: 'Gêmeos leg press', series: '4', reps: '15 reps' }
+                        ]
+                    }
+                ],
+                alimentacao: {
+                    calorias: 'superávit de 300-500 kcal',
+                    refeicoes: [
+                        {
+                            nome: 'Café da Manhã (7h)',
+                            itens: ['Ovos (4 unidades)', 'Pão integral (2 fatias)', 'Pasta de amendoim (30g)', 'Banana (1 unidade)', 'Leite integral (200ml)']
+                        },
+                        {
+                            nome: 'Lanche da Manhã (10h)',
+                            itens: ['Batata doce (200g)', 'Peito de frango (100g)', 'Castanhas (50g)']
+                        },
+                        {
+                            nome: 'Almoço (12h30)',
+                            itens: ['Carne vermelha (200g)', 'Arroz branco (200g)', 'Feijão (100g)', 'Legumes (à vontade)', 'Azeite (2 colheres)']
+                        },
+                        {
+                            nome: 'Pré-Treino (15h)',
+                            itens: ['Whey protein (1 scoop)', 'Aveia (60g)', 'Mel (1 colher)', 'Banana (1 unidade)']
+                        },
+                        {
+                            nome: 'Pós-Treino (17h30)',
+                            itens: ['Whey protein (1.5 scoop)', 'Dextrose (40g)', 'Creatina (5g)']
+                        },
+                        {
+                            nome: 'Jantar (19h30)',
+                            itens: ['Frango (200g)', 'Macarrão integral (150g)', 'Queijo (50g)', 'Salada verde']
+                        },
+                        {
+                            nome: 'Ceia (22h)',
+                            itens: ['Caseína ou leite (300ml)', 'Pasta de amendoim (30g)', 'Pão integral (1 fatia)']
+                        }
+                    ]
+                },
+                esportes: [
+                    { nome: 'Musculação', calorias: '300-500 cal/hora', imagem: 'images/musculacao.jpg' },
+                    { nome: 'Natação', calorias: '400-700 cal/hora', imagem: 'images/natacao.jpg' },
+                    { nome: 'Crossfit', calorias: '500-700 cal/hora', imagem: 'images/hero-fitness.jpg' }
+                ],
+                dicas: [
+                    { titulo: 'Proteína', texto: 'Consuma 1.6-2.2g de proteína por kg de peso corporal. Distribua em 4-6 refeições.' },
+                    { titulo: 'Progressão de Carga', texto: 'Aumente o peso a cada semana ou quinzena. Sem desafio, não há crescimento!' },
+                    { titulo: 'Descanso', texto: 'Músculos crescem durante o descanso. Durma bem e dê 48h de descanso entre treinos do mesmo grupo.' },
+                    { titulo: 'Creatina', texto: 'Tome 5g de creatina monohidratada por dia. É o suplemento mais estudado e eficaz.' },
+                    { titulo: 'Consistência', texto: 'Ganho de massa leva meses. Espere ganhar 0.25-0.5kg por semana no máximo.' }
+                ]
+            },
+            
+            'manutencao': {
+                titulo: 'Plano Manutenção',
+                descricao: 'Programa equilibrado para manter seu peso ideal com treinos variados e alimentação balanceada.',
+                imagem: 'images/yoga.jpg',
+                cor: '#0ea5e9',
+                fichas: [
+                    {
+                        dia: 'Segunda-feira',
+                        nome: 'Treino A - Full Body Leve',
+                        exercicios: [
+                            { nome: 'Aquecimento', series: '1', reps: '10 min' },
+                            { nome: 'Agachamento livre', series: '3', reps: '12 reps' },
+                            { nome: 'Supino halteres', series: '3', reps: '12 reps' },
+                            { nome: 'Remada máquina', series: '3', reps: '12 reps' },
+                            { nome: 'Desenvolvimento', series: '3', reps: '12 reps' },
+                            { nome: 'Prancha', series: '3', reps: '30 seg' },
+                            { nome: 'Alongamento', series: '1', reps: '10 min' }
+                        ]
+                    },
+                    {
+                        dia: 'Terça-feira',
+                        nome: 'Treino B - Cardio Moderado',
+                        exercicios: [
+                            { nome: 'Caminhada na esteira', series: '1', reps: '30 min' },
+                            { nome: 'Bicicleta ergométrica', series: '1', reps: '15 min' },
+                            { nome: 'Elíptico', series: '1', reps: '15 min' },
+                            { nome: 'Alongamento completo', series: '1', reps: '10 min' }
+                        ]
+                    },
+                    {
+                        dia: 'Quarta-feira',
+                        nome: 'Treino C - Força Moderada',
+                        exercicios: [
+                            { nome: 'Aquecimento', series: '1', reps: '8 min' },
+                            { nome: 'Leg press', series: '3', reps: '15 reps' },
+                            { nome: 'Puxada frontal', series: '3', reps: '12 reps' },
+                            { nome: 'Supino máquina', series: '3', reps: '12 reps' },
+                            { nome: 'Rosca direta', series: '2', reps: '15 reps' },
+                            { nome: 'Tríceps corda', series: '2', reps: '15 reps' },
+                            { nome: 'Abdominal', series: '3', reps: '20 reps' }
+                        ]
+                    },
+                    {
+                        dia: 'Quinta-feira',
+                        nome: 'Treino D - Yoga/Flexibilidade',
+                        exercicios: [
+                            { nome: 'Saudação ao sol', series: '5', reps: 'ciclos' },
+                            { nome: 'Postura do guerreiro', series: '3', reps: '30 seg cada lado' },
+                            { nome: 'Postura da árvore', series: '2', reps: '45 seg cada lado' },
+                            { nome: 'Alongamento de quadril', series: '2', reps: '60 seg cada lado' },
+                            { nome: 'Postura da criança', series: '2', reps: '60 seg' },
+                            { nome: 'Relaxamento final', series: '1', reps: '5 min' }
+                        ]
+                    },
+                    {
+                        dia: 'Sexta-feira',
+                        nome: 'Treino E - Funcional',
+                        exercicios: [
+                            { nome: 'Aquecimento', series: '1', reps: '5 min' },
+                            { nome: 'Agachamento com salto', series: '3', reps: '12 reps' },
+                            { nome: 'Flexão de braço', series: '3', reps: '12 reps' },
+                            { nome: 'Afundo alternado', series: '3', reps: '10 cada' },
+                            { nome: 'Prancha lateral', series: '2', reps: '30 seg cada lado' },
+                            { nome: 'Burpees', series: '3', reps: '10 reps' },
+                            { nome: 'Alongamento', series: '1', reps: '10 min' }
+                        ]
+                    }
+                ],
+                alimentacao: {
+                    calorias: 'manutenção (calorias = gasto)',
+                    refeicoes: [
+                        {
+                            nome: 'Café da Manhã (7h)',
+                            itens: ['Ovos (2 unidades)', 'Pão integral (1 fatia)', 'Fruta da estação', 'Café ou chá']
+                        },
+                        {
+                            nome: 'Lanche da Manhã (10h)',
+                            itens: ['Iogurte natural (170g)', 'Frutas (100g)', 'Granola (20g)']
+                        },
+                        {
+                            nome: 'Almoço (12h30)',
+                            itens: ['Proteína magra (150g)', 'Arroz integral (100g)', 'Leguminosas (80g)', 'Salada colorida', 'Azeite (1 colher)']
+                        },
+                        {
+                            nome: 'Lanche da Tarde (15h30)',
+                            itens: ['Frutas (1 porção)', 'Oleaginosas (30g)']
+                        },
+                        {
+                            nome: 'Jantar (19h)',
+                            itens: ['Proteína magra (120g)', 'Legumes variados', 'Carboidrato complexo (80g)']
+                        }
+                    ]
+                },
+                esportes: [
+                    { nome: 'Yoga', calorias: '200-400 cal/hora', imagem: 'images/yoga.jpg' },
+                    { nome: 'Caminhada', calorias: '200-400 cal/hora', imagem: 'images/cardio.jpg' },
+                    { nome: 'Natação', calorias: '400-700 cal/hora', imagem: 'images/natacao.jpg' }
+                ],
+                dicas: [
+                    { titulo: 'Equilíbrio', texto: 'Mantenha 80% de alimentação saudável e 20% de flexibilidade para manter a sanidade.' },
+                    { titulo: 'Variedade', texto: 'Alterne entre diferentes tipos de exercício para manter a motivação alta.' },
+                    { titulo: 'Monitoramento', texto: 'Pese-se semanalmente no mesmo horário para acompanhar variações.' },
+                    { titulo: 'Mobilidade', texto: 'Inclua alongamentos e yoga para manter a flexibilidade e prevenir lesões.' },
+                    { titulo: 'Sustentabilidade', texto: 'O melhor plano é aquele que você consegue seguir a longo prazo!' }
+                ]
+            },
+            
+            'hiit': {
+                titulo: 'Plano HIIT Intensivo',
+                descricao: 'Treinos de alta intensidade em intervalos para máxima queima calórica em pouco tempo.',
+                imagem: 'images/hero-fitness.jpg',
+                cor: '#f59e0b',
+                fichas: [
+                    {
+                        dia: 'Segunda-feira',
+                        nome: 'HIIT - Circuito Queima Total',
+                        exercicios: [
+                            { nome: 'Aquecimento', series: '1', reps: '3 min' },
+                            { nome: 'Burpees', series: '4', reps: '45 seg ON / 15 seg OFF' },
+                            { nome: 'Mountain climbers', series: '4', reps: '45 seg ON / 15 seg OFF' },
+                            { nome: 'Squat jumps', series: '4', reps: '45 seg ON / 15 seg OFF' },
+                            { nome: 'High knees', series: '4', reps: '45 seg ON / 15 seg OFF' },
+                            { nome: 'Plank jacks', series: '4', reps: '45 seg ON / 15 seg OFF' },
+                            { nome: 'Descanso ativo', series: '1', reps: '2 min caminhada' }
+                        ]
+                    },
+                    {
+                        dia: 'Terça-feira',
+                        nome: 'HIIT - Lower Body Blast',
+                        exercicios: [
+                            { nome: 'Aquecimento', series: '1', reps: '3 min' },
+                            { nome: 'Jump lunges', series: '4', reps: '40 seg ON / 20 seg OFF' },
+                            { nome: 'Sumo squat jumps', series: '4', reps: '40 seg ON / 20 seg OFF' },
+                            { nome: 'Single leg deadlift', series: '4', reps: '40 seg ON / 20 seg OFF' },
+                            { nome: 'Glute bridges pulse', series: '4', reps: '40 seg ON / 20 seg OFF' },
+                            { nome: 'Calf raises rápidos', series: '4', reps: '40 seg ON / 20 seg OFF' },
+                            { nome: 'Alongamento', series: '1', reps: '3 min' }
+                        ]
+                    },
+                    {
+                        dia: 'Quarta-feira',
+                        nome: 'Descanso Ativo',
+                        exercicios: [
+                            { nome: 'Caminhada leve', series: '1', reps: '30 min' },
+                            { nome: 'Alongamento completo', series: '1', reps: '15 min' },
+                            { nome: 'Foam roller', series: '1', reps: '10 min' }
+                        ]
+                    },
+                    {
+                        dia: 'Quinta-feira',
+                        nome: 'HIIT - Upper Body Fire',
+                        exercicios: [
+                            { nome: 'Aquecimento', series: '1', reps: '3 min' },
+                            { nome: 'Push-up to shoulder tap', series: '4', reps: '45 seg ON / 15 seg OFF' },
+                            { nome: 'Tricep dips', series: '4', reps: '45 seg ON / 15 seg OFF' },
+                            { nome: 'Commandos', series: '4', reps: '45 seg ON / 15 seg OFF' },
+                            { nome: 'Shoulder taps em prancha', series: '4', reps: '45 seg ON / 15 seg OFF' },
+                            { nome: 'Superman hold', series: '4', reps: '45 seg ON / 15 seg OFF' },
+                            { nome: 'Alongamento', series: '1', reps: '3 min' }
+                        ]
+                    },
+                    {
+                        dia: 'Sexta-feira',
+                        nome: 'HIIT - Core Destroyer',
+                        exercicios: [
+                            { nome: 'Aquecimento', series: '1', reps: '3 min' },
+                            { nome: 'Bicycle crunches', series: '4', reps: '40 seg ON / 20 seg OFF' },
+                            { nome: 'Russian twists', series: '4', reps: '40 seg ON / 20 seg OFF' },
+                            { nome: 'Leg raises', series: '4', reps: '40 seg ON / 20 seg OFF' },
+                            { nome: 'Plank hold', series: '4', reps: '40 seg ON / 20 seg OFF' },
+                            { nome: 'Dead bug', series: '4', reps: '40 seg ON / 20 seg OFF' },
+                            { nome: 'V-ups', series: '4', reps: '40 seg ON / 20 seg OFF' }
+                        ]
+                    }
+                ],
+                alimentacao: {
+                    calorias: 'déficit moderado de 200-400 kcal',
+                    refeicoes: [
+                        {
+                            nome: 'Café da Manhã (7h)',
+                            itens: ['Ovos (3 unidades)', 'Aveia (40g)', 'Frutas vermelhas (100g)', 'Café preto']
+                        },
+                        {
+                            nome: 'Lanche da Manhã (10h)',
+                            itens: ['Whey protein (1 scoop)', 'Banana (1 unidade)']
+                        },
+                        {
+                            nome: 'Almoço (12h30)',
+                            itens: ['Proteína magra (150g)', 'Carboidrato complexo (100g)', 'Vegetais (à vontade)', 'Gordura boa (1 colher azeite)']
+                        },
+                        {
+                            nome: 'Pré-Treino (30 min antes)',
+                            itens: ['Café preto ou pré-treino', 'Banana (se precisar energia)']
+                        },
+                        {
+                            nome: 'Pós-Treino',
+                            itens: ['Whey protein (1 scoop)', 'Fruta de rápida absorção']
+                        },
+                        {
+                            nome: 'Jantar (19h)',
+                            itens: ['Proteína magra (120g)', 'Vegetais verdes', 'Gorduras boas (abacate 50g)']
+                        }
+                    ]
+                },
+                esportes: [
+                    { nome: 'HIIT', calorias: '500-800 cal/hora', imagem: 'images/hero-fitness.jpg' },
+                    { nome: 'Corrida Intervalada', calorias: '600-900 cal/hora', imagem: 'images/cardio.jpg' },
+                    { nome: 'Pular Corda', calorias: '600-1000 cal/hora', imagem: 'images/sucesso.jpg' }
+                ],
+                dicas: [
+                    { titulo: 'Intensidade', texto: 'Durante os intervalos "ON", dê 100% de esforço. É isso que faz o HIIT funcionar!' },
+                    { titulo: 'Recuperação', texto: 'Descanse adequadamente entre sessões. HIIT é muito exigente para o corpo.' },
+                    { titulo: 'Hidratação', texto: 'Beba água antes, durante e depois. Você vai suar muito!' },
+                    { titulo: 'Não Exagere', texto: 'Máximo 4-5 sessões de HIIT por semana. Mais pode causar overtraining.' },
+                    { titulo: 'Afterburn', texto: 'O HIIT continua queimando calorias por até 24h após o treino!' }
+                ]
+            }
+        };
+
+        // ============================================
+        // FUNÇÕES DA PÁGINA
+        // ============================================
+
+        /**
+         * Inicializa a página do plano
+         */
+        function inicializarPaginaPlano() {
+            console.log('[FitLife] Inicializando página de plano');
+            
+            // Obter tipo de plano da URL
+            let tipoPlano = obterParametroURL('tipo') || 'perda-peso';
+            console.log('[FitLife] Tipo de plano:', tipoPlano);
+            
+            // Carregar dados do usuário
+            let dadosUsuario = JSON.parse(localStorage.getItem('dadosUsuario')) || {};
+            console.log('[FitLife] Dados do usuário:', dadosUsuario);
+            
+            // Verificar se o plano existe
+            if (!PLANOS[tipoPlano]) {
+                console.log('[FitLife] Plano não encontrado, usando padrão');
+                tipoPlano = 'perda-peso';
+            }
+            
+            let plano = PLANOS[tipoPlano];
+            
+            // Atualizar hero
+            document.getElementById('plano-titulo').textContent = plano.titulo;
+            document.getElementById('plano-descricao').textContent = plano.descricao;
+            document.getElementById('plano-hero-img').src = plano.imagem;
+            
+            // Atualizar dados do usuário
+            if (dadosUsuario.nome) {
+                document.getElementById('nome-usuario').textContent = dadosUsuario.nome;
+                document.getElementById('peso-atual').textContent = dadosUsuario.peso;
+                document.getElementById('peso-ideal').textContent = dadosUsuario.pesoIdeal;
+                document.getElementById('imc-valor').textContent = dadosUsuario.imc;
+                
+                // Calcular meta
+                let diferenca = Math.abs(dadosUsuario.diferencaPeso);
+                let icone = dadosUsuario.diferencaPeso > 0 ? '📉' : '📈';
+                let label = dadosUsuario.diferencaPeso > 0 ? 'Perder' : 'Ganhar';
+                
+                document.getElementById('meta-icone').textContent = icone;
+                document.getElementById('meta-peso').textContent = diferenca + ' kg';
+                document.getElementById('meta-label').textContent = label;
+                
+                // Atualizar progresso
+                document.getElementById('peso-inicio').textContent = dadosUsuario.peso;
+                document.getElementById('peso-meta').textContent = dadosUsuario.pesoIdeal;
+                
+                // Calcular porcentagem (começa em 0)
+                let progressoPct = 0;
+                document.getElementById('progresso-pct').textContent = progressoPct + '%';
+                document.getElementById('progresso-barra').style.width = progressoPct + '%';
+            }
+            
+            // Carregar conteúdo do plano
+            carregarFichasTreino(plano);
+            carregarPlanoAlimentar(plano);
+            carregarEsportesRecomendados(plano);
+            carregarDicas(plano);
+            
+            // Mostrar notificação de boas-vindas
+            let nomeUsuario = dadosUsuario.nome || 'Visitante';
+            mostrarNotificacao(`Bem-vindo(a) ao seu plano, ${nomeUsuario}! 🎉`, 'sucesso');
+        }
+
+        /**
+         * Carrega as fichas de treino
+         */
+        function carregarFichasTreino(plano) {
+            let container = document.getElementById('fichas-treino');
+            let html = '';
+            
+            plano.fichas.forEach(function(ficha, index) {
+                html += `
+                    <div class="treino-card" style="animation-delay: ${index * 0.1}s;">
+                        <div class="treino-header">
+                            <div class="treino-dia">${ficha.dia}</div>
+                            <div class="treino-nome">${ficha.nome}</div>
+                        </div>
+                        <div class="treino-exercicios">
+                            ${ficha.exercicios.map(function(ex, i) {
+                                return `
+                                    <div class="exercicio-item">
+                                        <div class="exercicio-numero">${i + 1}</div>
+                                        <div class="exercicio-nome">${ex.nome}</div>
+                                        <div class="exercicio-series">${ex.series}x</div>
+                                        <div class="exercicio-reps">${ex.reps}</div>
+                                    </div>
+                                `;
+                            }).join('')}
+                        </div>
+                    </div>
+                `;
+            });
+            
+            container.innerHTML = html;
+            console.log('[FitLife] Fichas de treino carregadas');
+        }
+
+        /**
+         * Carrega o plano alimentar
+         */
+        function carregarPlanoAlimentar(plano) {
+            let container = document.getElementById('plano-alimentar');
+            let html = `
+                <div style="background-color: var(--cor-fundo-card); border: 1px solid var(--cor-borda); border-radius: var(--raio-grande); padding: var(--espacamento-xl); margin-bottom: var(--espacamento-lg);">
+                    <h4 style="color: var(--cor-primaria); margin-bottom: var(--espacamento-md);">
+                        📊 Meta Calórica: ${plano.alimentacao.calorias}
+                    </h4>
+                    <p style="color: var(--cor-texto-secundario);">
+                        As refeições abaixo são sugestões baseadas no seu plano. Adapte as quantidades conforme sua necessidade calórica individual.
+                    </p>
+                </div>
+            `;
+            
+            plano.alimentacao.refeicoes.forEach(function(refeicao) {
+                html += `
+                    <div style="background-color: var(--cor-fundo-card); border: 1px solid var(--cor-borda); border-radius: var(--raio-grande); padding: var(--espacamento-lg); margin-bottom: var(--espacamento-md);">
+                        <h4 style="font-weight: 700; margin-bottom: var(--espacamento-md); color: var(--cor-texto);">
+                            ${refeicao.nome}
+                        </h4>
+                        <ul style="padding-left: var(--espacamento-lg);">
+                            ${refeicao.itens.map(function(item) {
+                                return `<li style="margin-bottom: var(--espacamento-xs); color: var(--cor-texto-secundario);">${item}</li>`;
+                            }).join('')}
+                        </ul>
+                    </div>
+                `;
+            });
+            
+            container.innerHTML = html;
+            console.log('[FitLife] Plano alimentar carregado');
+        }
+
+        /**
+         * Carrega esportes recomendados
+         */
+        function carregarEsportesRecomendados(plano) {
+            let container = document.getElementById('esportes-recomendados');
+            let html = '';
+            
+            plano.esportes.forEach(function(esporte) {
+                html += `
+                    <div class="esporte-card" onclick="alert('${esporte.nome.toUpperCase()}\\n\\nQueima aproximada: ${esporte.calorias}\\n\\nEste esporte é ideal para complementar seu plano!\\n\\nDica: Pratique 2-3 vezes por semana para melhores resultados.')">
+                        <img src="${esporte.imagem}" alt="${esporte.nome}">
+                        <div class="esporte-overlay">
+                            <span class="esporte-nome">${esporte.nome}</span>
+                            <span class="esporte-calorias">${esporte.calorias}</span>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            container.innerHTML = html;
+            console.log('[FitLife] Esportes recomendados carregados');
+        }
+
+        /**
+         * Carrega as dicas do plano
+         */
+        function carregarDicas(plano) {
+            let container = document.getElementById('dicas-plano');
+            let html = '<div class="planos-grid">';
+            
+            plano.dicas.forEach(function(dica, index) {
+                let icones = ['💡', '🎯', '⭐', '🔥', '✨'];
+                html += `
+                    <div style="background-color: var(--cor-fundo-card); border: 1px solid var(--cor-borda); border-radius: var(--raio-grande); padding: var(--espacamento-xl);">
+                        <div style="font-size: 2rem; margin-bottom: var(--espacamento-md);">${icones[index % icones.length]}</div>
+                        <h4 style="font-weight: 700; margin-bottom: var(--espacamento-sm); color: var(--cor-texto);">
+                            ${dica.titulo}
+                        </h4>
+                        <p style="color: var(--cor-texto-secundario); line-height: 1.6;">
+                            ${dica.texto}
+                        </p>
+                    </div>
+                `;
+            });
+            
+            html += '</div>';
+            container.innerHTML = html;
+            console.log('[FitLife] Dicas carregadas');
+        }
+
+        /**
+         * Alterna entre tabs
+         */
+        function mudarTab(tabId) {
+            console.log('[FitLife] Mudando para tab:', tabId);
+            
+            // Remover classe ativo de todas as tabs
+            document.querySelectorAll('.tab').forEach(function(tab) {
+                tab.classList.remove('ativo');
+            });
+            document.querySelectorAll('.tab-conteudo').forEach(function(conteudo) {
+                conteudo.classList.remove('ativo');
+            });
+            
+            // Adicionar classe ativo na tab selecionada
+            document.querySelector(`.tab[data-tab="${tabId}"]`).classList.add('ativo');
+            document.getElementById(`tab-${tabId}`).classList.add('ativo');
+        }
+
+        /**
+         * Salva o progresso do usuário
+         */
+        function salvarProgresso() {
+            let dadosUsuario = JSON.parse(localStorage.getItem('dadosUsuario')) || {};
+            dadosUsuario.ultimoAcesso = new Date().toISOString();
+            localStorage.setItem('dadosUsuario', JSON.stringify(dadosUsuario));
+            
+            alert('✅ PROGRESSO SALVO!\n\nSeu progresso foi salvo localmente.\n\nDica: Volte regularmente para acompanhar sua evolução e atualizar suas medidas!');
+            console.log('[FitLife] Progresso salvo:', dadosUsuario);
+        }
+
+        /**
+         * Obtém parâmetro da URL
+         */
+        function obterParametroURL(nome) {
+            let urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(nome);
+        }
+
+        // ============================================
+        // INICIALIZAÇÃO
+        // ============================================
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            inicializarPaginaPlano();
+        });
+    </script>
+</body>
+</html>
