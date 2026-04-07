@@ -457,6 +457,24 @@ function inicializarFormularios() {
         });
     });
     
+    // Validar campo de altura (aceita ponto e vírgula como separador decimal)
+    let campoAltura = document.getElementById('altura');
+    if (campoAltura) {
+        campoAltura.addEventListener('input', function() {
+            // Converter vírgula para ponto
+            this.value = this.value.replace(',', '.');
+            
+            // Remover caracteres não numéricos (exceto ponto)
+            this.value = this.value.replace(/[^0-9.]/g, '');
+            
+            // Permitir apenas um ponto decimal
+            let partes = this.value.split('.');
+            if (partes.length > 2) {
+                this.value = partes[0] + '.' + partes.slice(1).join('');
+            }
+        });
+    }
+    
     console.log('[FitLife] Formulários inicializados');
 }
 
